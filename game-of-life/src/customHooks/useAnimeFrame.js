@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import moment from "moment";
-
+import React, { useEffect, useState } from "react";
 
 // custom hook for using animation frame
-export const useAnimeFrame = (timestamp, doAnimationCallBack) => {
+const useAnimeFrame = (timestamp, doAnimationCallBack) => {
 
     // set the prev time stamp
     const [prevTimeStamp, setTimeStamp] = useState(timestamp - 30);
@@ -43,25 +41,3 @@ export const useAnimeFrame = (timestamp, doAnimationCallBack) => {
     return [cancelAnimation];
 
 };
-
-const Canvas = (props) => {
-
-    const canvasRef = useRef(null);
-
-    const [stopAnimation, setStopAnimation] = useState(false);
-
-    const doAnimation = (elapsedTime) => {
-        console.log("elapsed time:", elapsedTime);
-        console.log(canvasRef.current);
-    };
-
-    const [cancelAnimationFrame] = useAnimeFrame(moment.now(), doAnimation);
-
-    /**
-     * Render the canvas
-     */
-    return (<canvas ref={canvasRef} width={props.width}
-        height={props.height} />);
-};
-
-export default Canvas;
