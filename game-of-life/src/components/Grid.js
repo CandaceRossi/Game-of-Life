@@ -4,7 +4,7 @@ import Cell from "./Cell";
 
 function Grid (props) {
         //sets the width of grid
-         const width = props.cols * 14;
+         const width = (props.cols * 16) + 1;
             //array that stores the loop of cell objects
             let collectedArr = [];
             //empty string for the class to take ternary
@@ -24,6 +24,7 @@ function Grid (props) {
                         key={cellId}
                         row={i}
                         col={j}
+                        selectCell={props.selectCell}
                         />
                     );
                 }
