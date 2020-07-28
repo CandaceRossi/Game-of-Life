@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Grid from './components/Grid';
 import About from './components/About';
 import './App.css';
@@ -15,9 +15,26 @@ function App() {
     let gridCopy = arrayClone(gridDisplay);
     //find exact cell that was clicked then set to opposite
     gridCopy[row][col] = !gridCopy[row][col];
-    setGridDisplay(gridCopy)
+    setGridDisplay(gridCopy);
   }
-
+  let RandomCells = () => {
+    console.log("randomcells")
+    //set up copy of grid
+    let gridCopy = arrayClone(gridDisplay);
+    //nested for loops iterate through grid decide state of each cell
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        //assign grid buffer to 50% random cell selection
+        gridCopy[i][j] = Math.floor(Math.random() * 2)
+      }
+    }
+    setGridDisplay(gridCopy);
+  }
+  //useEffect initiates state with random alive and dead cells
+  useEffect(() => {
+    return RandomCells();
+    }, [])
+  
   return (
     <div className="App">
     <header className="App-header">

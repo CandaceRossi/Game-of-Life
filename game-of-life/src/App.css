@@ -19,6 +19,8 @@
     border: 1px solid darkslategray;
     width: 15px;
     height: 15px;
+    margin-left: -1px;
+    margin-bottom: -1px;
 }
 
 .cell:hover {
