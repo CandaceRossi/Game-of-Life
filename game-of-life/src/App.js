@@ -15,7 +15,9 @@ function App() {
   // asign state to array for row and array for col - fill initial state with zeros
   const [gridDisplay, setGridDisplay] = useState(() => new Array(rows).fill().map(() => new Array(cols).fill(false)));
   const [generation, setGeneration] = useState(0);
-  // const [speed, setSpeed] = useState(100);
+  const [interval, setInterval] = useState(null);
+  const [isRunning, setIsRunning] = useState(true);
+
 
   //update a array "copy" of grid then set gridDisplay state to update state
   let selectCell = (row, col) => {
@@ -23,7 +25,7 @@ function App() {
     //find exact cell that was clicked then set to opposite
     gridCopy[row][col] = !gridCopy[row][col];
     setGridDisplay(gridCopy);
-    console.log("SELECTED SHIT", gridCopy[row][col])
+    console.log("SELECTED", gridCopy[row][col])
   }
   let randomCells = (i, j) => {
 
@@ -40,21 +42,22 @@ function App() {
       }
     }
     console.log("SET GRID DISPLAY", gridDisplay)
-    return gridCopy
+    //setGridDisplay(gridCopy)
+    return setGridDisplay(gridCopy)
   }
 
   // useEffect initiates state with random alive and dead cells
-  // useEffect(() => {
-  //   console.log('random ceeeells', randomCells())
-  //   return (start())
-  // }, [])
   useEffect(() => {
-    let startGame = setInterval(() => start(), 100)
-    return () => {
-      console.log("this is a state", start())
-      clearInterval(startGame)
-    }
+    console.log('random ceeeells', randomCells())
+    return (startButton())
   }, [])
+  // useEffect(() => {
+  //   let startGame = setInterval(() => start(), 100)
+  //   return () => {
+  //     console.log("this is a state", start())
+  //     clearInterval(startGame)
+  //   }
+  // }, [])
 
   // let countNeighbors = (grid, x, y) => {
   //   let sum = 0;
@@ -68,29 +71,48 @@ function App() {
   // }
 
   let startButton = () => {
-    let startThis = () => {
-      setInterval(start(), speed);
-      return clearInterval(startThis())
-    }
-  }
-  let stopButton = () => {
-    let stopThis = () => {
-      return clearInterval(stopThis())
-    }
+    let startThis = clearInterval(() => {
+      setInterval((start, speed))
+    })
+    return setInterval(startThis)
   }
 
+  let stopButton = () => {
+    let id = setInterval(interval);
+    setInterval(id);
+    return clearInterval(id);
+  }
+
+  //set grid to initial new array, set generations back to zero
+  let reset = () => {
+    let grid = new Array(rows).fill().map(() => new Array(cols).fill(false));
+    setGridDisplay(grid)
+    setGeneration(0)
+  }
+  //set speed to 1000
+  let slow = () => {
+    speed = 1000;
+    startButton();
+  }
+  //set speed to 100
+  let fast = () => {
+    speed = 100;
+    startButton();
+  }
+  //function that starts the game, sets the edge cases
+  //accounts for neighbors, sets game logic based off neighbors
   let start = () => {
     //account for two grid states
-    let grid = randomCells(gridDisplay);
+    let grid = gridDisplay;
     console.log("start grid", grid)
-    let gridCopy = arrayClone(grid);
+    let gridCopy = arrayClone(gridDisplay);
     console.log("second grid", gridCopy)
 
     //nested loops to iterate through cells, check state, and assign state
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
 
-        //  Account for the edges
+        //  Account for the edges by keeping them static
         if ([i] === 0 || [i] === cols - 1 || [j] === 0 || [j] === rows - 1) {
           gridCopy[i][j] = grid[i][j];
         }
@@ -142,33 +164,32 @@ function App() {
           if (!grid[i][j] && aliveNeighbors === 3) {
             gridCopy[i][j] = true;
           }
-          // else {
-          //   gridCopy[i][j] = grid[i][j]
-          // }
+          else {
+            gridCopy[i][j] = grid[i][j]
+          }
         }
       }
     }
 
     console.log("start function does this", gridDisplay)
     // grid = gridCopy
+    setGeneration(generation + 1)
     return setGridDisplay(gridCopy)
-    // setGeneration(generation + 1)
   }
 
   return (
     <div className="App">
       <div className="star-contianer">
-        <img className="starlite" src={triangles} alt="" style={{ width: "300px", height: "250px" }} />
-        <h2 className="title">Conway's Game of Life</h2>
-        <h3 className="title">Generations: {generation}</h3>
+        {/* <div className="starlite"><img src={triangles} alt="" style={{ width: "300px", zIndex: "9", top: "15px" }} /></div> */}
+        <div className="title"><h2>Conway's Game of Life</h2></div>
+        {/* <div className="starlite"><img src={triangles} alt="" style={{ width: "300px" }} /></div> */}
       </div>
       <div className="components">
         <Grid gridDisplay={gridDisplay} rows={rows} cols={cols} selectCell={selectCell} />
-        <Buttons startButton={startButton} stopButton={stopButton} />
-        {/* //slow={slow} fast={fast} clear={clear} randomCell={randomCell} gridSize={gridSize} /> */}
+        <Buttons startButton={startButton} stopButton={stopButton} reset={reset} slow={slow} fast={fast} randomCells={randomCells} />
         <Modal />
       </div>
-
+      <div><h3 className="title">Generations: {generation}</h3></div>
     </div>
   );
 }
