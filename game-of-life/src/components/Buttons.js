@@ -4,29 +4,22 @@ const Buttons = (props) => {
 
     return (
         <div className="btn-display">
-            <button className="btn-style" onClick={props.startButton} >
-                Start
+            <button className="btn-style" onClick={props.startButton, props.runningRef.current = true} >
+                {props.isRunning ? "stop" : "start"}
             </button>
-            <button className="btn-style" onClick={props.stopButton}>
-                Stop
+        <button className="btn-style" onClick={props.reset} >
+            Reset
             </button>
-            <button className="btn-style" onClick={props.reset} >
-                Reset
+        <button className="btn-style" onClick={props.slow}>
+            Slow
             </button>
-            <button className="btn-style" onClick={props.slow}>
-                Slow
+        <button className="btn-style" onClick={props.fast}>
+            Fast
             </button>
-            <button className="btn-style" onClick={props.fast}>
-                Fast
+        <button className="btn-style" onClick={props.randomCells}>
+            Random Input
             </button>
-            <button className="btn-style" onClick={props.randomCells} >
-                Random Input
-            </button>
-        </div>
+        </div >
     )
 }
 export default Buttons;
-// onClick = { props }
-// onClick = { props }
-// onClick = { props }
-// onClick = { props }
