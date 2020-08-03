@@ -1,216 +1,175 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Grid from './components/Grid';
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import produce from 'immer';
+// import Grid from './components/Grid';
 import Buttons from './components/Buttons';
 import Modal from './components/Modal';
-import triangles from '../src/images/triangles.jpg';
+// import triangles from '../src/images/triangles.jpg';
 import './App.scss';
 
 
+// const numRows = 25;
+// const numCols = 25;
 
-function App() {
-  let rows = 30;
-  let cols = 50;
-  let speed = 100;
+const operations = [
+  [0, 1],
+  [0, -1],
+  [1, -1],
+  [-1, 1],
+  [1, 1],
+  [-1, -1],
+  [1, 0],
+  [-1, 0]
+];
+
+const App = () => {
 
   // asign state to array for row and array for col - fill initial state with zeros
-  const [gridDisplay, setGridDisplay] = useState(() => new Array(rows).fill().map(() => new Array(cols).fill(false)));
-  const [generation, setGeneration] = useState(0);
-  const [interval, setInterval] = useState(null);
-  const [isRunning, setIsRunning] = useState(true);
-
-
-  //update a array "copy" of grid then set gridDisplay state to update state
-  let selectCell = (row, col) => {
-    let gridCopy = arrayClone(gridDisplay);
-    //find exact cell that was clicked then set to opposite
-    gridCopy[row][col] = !gridCopy[row][col];
-    setGridDisplay(gridCopy);
-    console.log("SELECTED", gridCopy[row][col])
-  }
-  let randomCells = (i, j) => {
-
-    //set up copy of grid
-    let gridCopy = arrayClone(gridDisplay);
-    //nested for loops iterate through grid decide state of each cell
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        //assign grid buffer to 50% random cell selection
-        if (Math.floor(Math.random() * 2)) {
-          gridCopy[i][j] = true
-        }
-        // gridCopy[i][j] = Math.floor(Math.random() * 2)
-      }
+  const [numRows, setNumRows] = useState(25);
+  const [numCols, setNumCols] = useState(25);
+  const [gridDisplay, setGridDisplay] = useState(() => {
+    const rows = [];
+    for (let i = 0; i < numRows; i++) {
+      rows.push(Array.from(Array(numCols), () => 0));
     }
-    console.log("SET GRID DISPLAY", gridDisplay)
-    //setGridDisplay(gridCopy)
-    return setGridDisplay(gridCopy)
-  }
+    return rows
+  });
+  const [generation, setGeneration] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [speed, setSpeed] = useState(1000);
 
-  // useEffect initiates state with random alive and dead cells
-  useEffect(() => {
-    console.log('random ceeeells', randomCells())
-    return (startButton())
-  }, [])
-  // useEffect(() => {
-  //   let startGame = setInterval(() => start(), 100)
-  //   return () => {
-  //     console.log("this is a state", start())
-  //     clearInterval(startGame)
-  //   }
-  // }, [])
-
-  // let countNeighbors = (grid, x, y) => {
-  //   let sum = 0;
-  //   for (let i = -1; i < 2; i++) {
-  //     for (let j = -1; j < 2; j++) {
-  //       sum += grid[x + i][y + j];
-  //     }
-  //   }
-  //   sum -= grid[x][y]
-  //   return sum;
+  // const handleSelect = (evt) => {
+  //   setGridSize(evt)
   // }
+  const useInterval = (callback, delay, started) => {
+    const savedCallback = useRef();
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      let id = null;
+      if (delay !== null && started) {
+        id = setInterval(tick, delay);
+        return () => {
+          clearInterval(id);
+        };
+      } else {
+        if (id) {
+          clearInterval(id);
+        }
+      }
+    }, [callback, delay, started]);
+  };
 
-  let startButton = () => {
-    let startThis = clearInterval(() => {
-      setInterval((start, speed))
-    })
-    return setInterval(startThis)
-  }
 
-  let stopButton = () => {
-    let id = setInterval(interval);
-    setInterval(id);
-    return clearInterval(id);
+  const randomCells = () => {
+    const rows = [];
+    for (let i = 0; i < numRows; i++) {
+      rows.push(Array.from(Array(numCols), () => Math.random() > 0.7 ? 1 : 0));
+    }
+    setGridDisplay(rows)
   }
 
   //set grid to initial new array, set generations back to zero
-  let reset = () => {
-    let grid = new Array(rows).fill().map(() => new Array(cols).fill(false));
-    setGridDisplay(grid)
+  const reset = () => {
+    const rows = [];
+    for (let i = 0; i < numRows; i++) {
+      rows.push(Array.from(Array(numCols), () => 0));
+    }
+    setGridDisplay(rows)
     setGeneration(0)
   }
   //set speed to 1000
-  let slow = () => {
-    speed = 1000;
-    startButton();
+  const slow = () => {
+    setSpeed(1000)
+    start()
+    // setIsRunning(isRunning, speed = 1000)
   }
   //set speed to 100
-  let fast = () => {
-    speed = 100;
-    startButton();
+  const fast = () => {
+    setSpeed(300)
+    start()
+    // setIsRunning(isRunning, speed = 300)
   }
+
+
   //function that starts the game, sets the edge cases
   //accounts for neighbors, sets game logic based off neighbors
-  let start = () => {
-    //account for two grid states
-    let grid = gridDisplay;
-    console.log("start grid", grid)
-    let gridCopy = arrayClone(gridDisplay);
-    console.log("second grid", gridCopy)
+  const start = useCallback(() => {
 
-    //nested loops to iterate through cells, check state, and assign state
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
+    setGridDisplay((g) => {
+      return produce(g, gridCopy => {
+        for (let i = 0; i < numRows; i++) {
+          for (let j = 0; j < numCols; j++) {
+            // setGeneration(generation + 1)
+            let aliveNeighbors = 0;
+            operations.forEach(([x, y]) => {
+              const newI = i + x;
+              const newJ = j + y;
+              if (newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols) {
+                aliveNeighbors += g[newI][newJ];
+              }
 
-        //  Account for the edges by keeping them static
-        if ([i] === 0 || [i] === cols - 1 || [j] === 0 || [j] === rows - 1) {
-          gridCopy[i][j] = grid[i][j];
-        }
-
-        //all of the grid placements of neighbors around current cell or grid[i][j] 
-        else {
-          //count live neighbors
-          let aliveNeighbors = 0;
-
-          // let aliveNeighbors = countNeighbors(grid, i, j);
-          if (i < rows - 1 && grid[i + 1][j]) {
-            //increase count
-            aliveNeighbors += 1
-          }
-
-          if (i > 0 && grid[i - 1][j]) {
-            aliveNeighbors += 1
-          }
-
-          if ((i > 0 && j > 0) && grid[i - 1][j - 1]) {
-            aliveNeighbors += 1
-          }
-
-          if ((i > 0 && j < cols - 1) && grid[i - 1][j + 1]) {
-            aliveNeighbors += 1
-          }
-
-          if ((i < rows - 1 && j > 0) && grid[i + 1][j - 1]) {
-            aliveNeighbors += 1
-          }
-
-          if ((i < rows - 1 && cols - 1) && grid[i + 1][j + 1]) {
-            aliveNeighbors += 1
-          }
-
-          if ((j < cols - 1) && grid[i][j + 1]) {
-            aliveNeighbors += 1
-          }
-
-          if (j > 0 && grid[i][j - 1]) {
-            aliveNeighbors += 1
-          }
-
-
-          //add rules of Conway's Game of Life
-          if (grid[i][j] && (aliveNeighbors < 2 || aliveNeighbors > 3)) {
-            gridCopy[i][j] = false;
-          }
-          if (!grid[i][j] && aliveNeighbors === 3) {
-            gridCopy[i][j] = true;
-          }
-          else {
-            gridCopy[i][j] = grid[i][j]
+            })
+            if (aliveNeighbors < 2 || aliveNeighbors > 3) {
+              gridCopy[i][j] = 0;
+            } else if (g[i][j] === 0 && aliveNeighbors === 3) {
+              gridCopy[i][j] = 1;
+            }
           }
         }
-      }
-    }
+        setGeneration((g) => g + .5)
+      });
+    });
 
-    console.log("start function does this", gridDisplay)
-    // grid = gridCopy
-    setGeneration(generation + 1)
-    return setGridDisplay(gridCopy)
-  }
+  }, []);
+
+  useInterval(
+    () => start(),
+    300, isRunning
+  );
 
   return (
     <div className="App">
-      <div className="star-contianer">
-        {/* <div className="starlite"><img src={triangles} alt="" style={{ width: "300px", zIndex: "9", top: "15px" }} /></div> */}
-        <div className="title"><h2>Conway's Game of Life</h2></div>
-        {/* <div className="starlite"><img src={triangles} alt="" style={{ width: "300px" }} /></div> */}
-      </div>
+      <h2>Conway's Game of Life</h2>
       <div className="components">
-        <Grid gridDisplay={gridDisplay} rows={rows} cols={cols} selectCell={selectCell} />
-        <Buttons startButton={startButton} stopButton={stopButton} reset={reset} slow={slow} fast={fast} randomCells={randomCells} />
+        <div className="grid" style={{
+          width: "510px",
+          display: "grid",
+          gridTemplateColumns: `repeat(${numCols}, 20px)`
+        }}>
+          {gridDisplay.map((rows, i) =>
+            rows.map((col, j) =>
+
+              <div
+                className="cell"
+                key={`${i}` - `${j}`}
+                onClick={() => {
+                  const newGrid = produce(gridDisplay, gridCopy => {
+                    if (!isRunning) {
+                      gridCopy[i][j] = gridDisplay[i][j] ? 0 : 1;
+                    }
+
+                  })
+                  setGridDisplay(newGrid);
+                }}
+
+                style={
+                  gridDisplay[i][j] ? { "margin": "0 auto", "width": 0, "height": 0, "borderLeft": "7px solid transparent", "borderRight": "7px solid transparent", "borderBottom": "15px solid rgb(84, 114, 204)" } : undefined
+                }
+              />
+            ))}
+        </div>
+        <Buttons setIsRunning={setIsRunning} isRunning={isRunning} randomCells={randomCells} reset={reset} slow={slow} fast={fast} numRows={numRows} setNumRows={setNumRows} numCols={numCols} setNumCols={setNumCols} />
         <Modal />
       </div>
-      <div><h3 className="title">Generations: {generation}</h3></div>
+      <h3>Generations: {generation}</h3>
     </div>
-  );
+  )
 }
 
-//function to clone 2d arrays
-let arrayClone = (arr) => {
-  //set to string and parse clone arrays inside of arrays
-  return JSON.parse(JSON.stringify(arr));
-}
 
 export default App;
 
-
-
-
-  // useEffect(() => (cell, nextState) => {
-  //   setGridDisplay(oldBoard => {
-  //     let tempBoard = [...oldBoard];
-  //     tempBoard[cell[0]][cell[1]] = nextState;
-  //     return tempBoard
-  //   })
-  // }, [setGridDisplay]
-  // )
-  // function starts game

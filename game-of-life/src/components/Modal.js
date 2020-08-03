@@ -53,7 +53,9 @@ function Modal() {
     document.querySelector('.popups-cont__overlay').addEventListener('click', closeHandler);
 
     return (
-        <div></div>
+        <div>
+
+        </div>
     )
 }
 
