@@ -13,6 +13,12 @@ const Buttons = (props) => {
                 <button className="btn-style" onClick={props.reset} >
                     Reset
             </button>
+                <button className="btn-style" onClick={() => {
+                    props.setNumRows(35)
+                    props.setNumCols(35)
+                }}>
+                    {props.numRows && props.numCols ? "Bigger" : "Smaller"}
+                </button>
                 <button className="btn-style" onClick={props.slow}>
                     Slow
             </button>
@@ -22,6 +28,7 @@ const Buttons = (props) => {
                 <button className="btn-style" onClick={props.randomCells}>
                     Random Input
             </button></div>
+
         </>
     )
 }

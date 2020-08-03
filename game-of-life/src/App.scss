@@ -3,34 +3,9 @@
                 height: 100vh;
                 margin: 0 auto;
                 padding: 15px;
-                background: rgb(0, 202, 135);
-                box-sizing: border-box;
-            }
-            
-            .star-container {
-                margin: 0px;
-                width: 100%;
-                // height: 200px;
-                display: flex;
-                flex-wrap: nowrap;
-                flex-direction: row;
-                justify-content: center;
-                box-sizing: border-box;
-            }
-            
-            .starlite {
-                margin: 0 auto;
-                // width: 400px;
-                height: 105px;
-                overflow: hidden;
-                box-sizing: border-box;
-            }
-            
-            .title {
-                margin: 0 auto;
-                // width: 400px;
-                padding: 0px 45px;
-                box-sizing: border-box;
+                background-image: url("../src/images/tri.jpg");
+                background-size: 100vw 100vh;
+                background-repeat: no-repeat;
             }
             
             .components {
@@ -55,7 +30,7 @@
                 height: 50px;
                 margin-left: -100px;
                 margin-top: -25px;
-                background: transparent;
+                background: rgba(245, 245, 245, 0.623);
                 outline: none;
                 font-size: 20px;
                 text-transform: uppercase;
@@ -84,6 +59,7 @@
                 border: 1px solid greenyellow;
                 border-radius: 7px;
                 background: greenyellow;
+                box-shadow: 5px 5px 15px 15px rgba(245, 245, 245, 0.623);
             }
             
             .cell {
@@ -98,11 +74,24 @@
                 margin: 0 auto;
             }
             
-            h2,
+            h2 {
+                margin: 0 auto;
+                padding: 20px;
+                font-size: 4rem;
+                color: greenyellow;
+                display: flex;
+                justify-content: center;
+                text-shadow: 2px 1px rgb(180, 151, 151);
+            }
+            
             h3 {
+                margin: 0 auto;
+                padding: 20px;
                 font-size: 3rem;
                 color: greenyellow;
-                text-shadow: 1px 1px rgb(180, 151, 151);
+                display: flex;
+                justify-content: center;
+                text-shadow: 2px 1px rgb(180, 151, 151);
             }
             
             *,
@@ -120,12 +109,16 @@
             
             $pieceAT: 0.7s;
             $contentFadeAT: 0.2s;
-            @function map-set($map, $key, $value) {
+            @function map-set($map,
+            $key,
+            $value) {
                 $new: ($key: $value);
-                @return map-merge($map, $new);
+                @return map-merge($map,
+                $new);
             }
             
-            @mixin shatteredPopup($inRow: 6, $inCol: 6) {
+            @mixin shatteredPopup($inRow: 6,
+            $inCol: 6) {
                 $pieces: $inRow * $inCol;
                 $heights: ();
                 $hTotal: 100;
@@ -136,7 +129,9 @@
                         $hVal: $hTotal;
                     }
                     $hTotal: $hTotal - $hVal;
-                    $heights: map-set($heights, $i, $hVal);
+                    $heights: map-set($heights,
+                    $i,
+                    $hVal);
                     $widths: ();
                     $wTotal: 100;
                     @for $j from 1 through $inRow {
@@ -146,9 +141,13 @@
                             $wVal: $wTotal;
                         }
                         $wTotal: $wTotal - $wVal;
-                        $widths: map-set($widths, $j, $wVal);
+                        $widths: map-set($widths,
+                        $j,
+                        $wVal);
                     }
-                    $heights: map-set($heights, 'widths-#{$i}', $widths);
+                    $heights: map-set($heights,
+                    'widths-#{$i}',
+                    $widths);
                 }
                 $k: 4;
                 @for $i from 1 through $pieces {
@@ -157,7 +156,8 @@
                         $pieceH: map-get($heights, $indexH);
                         height: percentage($pieceH / 100);
                         $indexW: $i % $inRow + 1;
-                        $pieceW: map-get(map-get($heights, 'widths-#{$indexH}'), $indexW);
+                        $pieceW: map-get(map-get($heights, 'widths-#{$indexH}'),
+                        $indexW);
                         width: percentage($pieceW / 100);
                         $pieceX: percentage((30 + random(40)) / 100);
                         @for $j from 1 through 3 {
@@ -324,39 +324,13 @@
             
             .popup-btn {
                 position: absolute;
-                left: 30%;
-                top: 650px;
+                left: 25%;
+                top: 75%;
                 width: 200px;
                 height: 50px;
                 margin-left: -100px;
                 margin-top: -25px;
-                background: transparent;
-                outline: none;
-                font-size: 20px;
-                text-transform: uppercase;
-                font-weight: bold;
-                color: #000;
-                border: 2px solid #000;
-                transition: all 0.3s;
-                cursor: pointer;
-                &:hover {
-                    background-color: #000;
-                    color: #fff;
-                    letter-spacing: 2px;
-                    box-shadow: 0 5px 15px greenyellow;
-                    transition: box-shadow 0.3 ease-in-out;
-                }
-            }
-            
-            .popup-2ndbtn {
-                position: absolute;
-                left: 50%;
-                top: 750px;
-                width: 200px;
-                height: 50px;
-                margin-left: -100px;
-                margin-top: -25px;
-                background: transparent;
+                background: rgba(245, 245, 245, 0.623);
                 outline: none;
                 font-size: 20px;
                 text-transform: uppercase;

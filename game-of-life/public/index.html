@@ -24,40 +24,28 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+
     <div class="popups-cont">
         <div class="popups-cont__overlay"></div>
         <div class="popup">
             <div class="popup__pieces"></div>
             <div class="popup__content">
                 <div class="popup__close"></div>
-                <h3 class="popup__heading">About This Algorithm:</h3>
-                <p class="popup__text">The Game of Life is a cellular-automaton, zero player game, developed by John Conway in 1970. The game is played on an infinite grid of square cells, and its evolution is only determined by its initial state.</p>
-                <p>The rules of the game are simple, and describe the evolution of the grid: ◮ Birth: a cell that is dead at time t will be alive at time t + 1 if exactly 3 of its eight neighbors were alive at time t. ◮ Death: a cell can die by: ◮ Overcrowding:
-                    if a cell is alive at time t + 1 and 4 or more of its neighbors are also alive at time t, the cell will be dead at time t + 1. ◮ Exposure: If a live cell at time t has only 1 live neighbor or no live neighbors, it will be dead at time
-                    t + 1. ◮ Survival: a cell survives from time t to time t + 1 if and only if 2 or 3 of its neighbors are alive at time t.</p>
-
-                <p>Starting from the initial configuration, these rules are applied, and the game board evolves, playing the game by itself! This might seem like a rather boring game at first, but there are many remarkable facts about this game. Today we
-                    will see the types of “life-forms” we can create with this game, whether we can tell if a game of Life will go on infinitely, and see how a game of Life can be used to solve any computational problem a computer can solve.</p>
+                <h3 class="popup__heading"> About This Game: </h3>
+                <p class="popup__text"> The Game of Life is a cellular-automaton, zero player game, developed by John Conway in 1970. </p><br />
+                <p> Based on the state of each cell, whether each cell is alive or dead through a given round of the game, the community of cells evolve.</p><br />
+                <h4> The rules are as follow: </h4>
+                <p>◮ Birth: a dead cell will come alive if exactly 3 of its neighbors were alive.</p> <br/>
+                <p>◮ Death: a cell can die by: </p>
+                <p>◮ Overcrowding: if an alive cell has 3 or more alive neighbors, the cell will die. </p>
+                <p>◮ Exposure: If an alive cell has only 1 or 0 live neighbors, it will die</p> <br/>
+                <p>◮ Survival: a cell survives round to round if and only if 2 or 3 of its neighbors are alive.</p> <br/>
+                <p> Pay attention and see repetitive types of “life-forms” created in the game and whether a game of life session will go on infinitely.</p>
             </div>
         </div>
     </div>
 
     <button type="button" class="popup-btn">About Game</button>
-
-    <!-- <div class="popups-cont">
-        <div class="popups-cont__overlay"></div>
-        <div class="popup">
-            <div class="popup__pieces"></div>
-            <div class="popup__content">
-                <div class="popup__close"></div>
-                <h3 class="popup__heading">About John Conway:</h3>
-                <p class="popup__text">The Game
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <button type="button" class="popup-2ndbtn">About Conway</button>  -->
 
 
 </head>

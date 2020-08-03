@@ -7,9 +7,8 @@ import Modal from './components/Modal';
 import './App.scss';
 
 
-const numRows = 25;
-const numCols = 25;
-let speed = 1000;
+// const numRows = 25;
+// const numCols = 25;
 
 const operations = [
   [0, 1],
@@ -25,6 +24,8 @@ const operations = [
 const App = () => {
 
   // asign state to array for row and array for col - fill initial state with zeros
+  const [numRows, setNumRows] = useState(25);
+  const [numCols, setNumCols] = useState(25);
   const [gridDisplay, setGridDisplay] = useState(() => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
@@ -34,8 +35,11 @@ const App = () => {
   });
   const [generation, setGeneration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [speed, setSpeed] = useState(1000);
 
-
+  // const handleSelect = (evt) => {
+  //   setGridSize(evt)
+  // }
   const useInterval = (callback, delay, started) => {
     const savedCallback = useRef();
     useEffect(() => {
@@ -79,22 +83,27 @@ const App = () => {
   }
   //set speed to 1000
   const slow = () => {
-    // speed = 1000;
-    setIsRunning(isRunning, speed = 1000)
+    setSpeed(1000)
+    start()
+    // setIsRunning(isRunning, speed = 1000)
   }
   //set speed to 100
   const fast = () => {
-    setIsRunning(isRunning, speed = 300)
+    setSpeed(300)
+    start()
+    // setIsRunning(isRunning, speed = 300)
   }
 
 
   //function that starts the game, sets the edge cases
   //accounts for neighbors, sets game logic based off neighbors
   const start = useCallback(() => {
+
     setGridDisplay((g) => {
       return produce(g, gridCopy => {
         for (let i = 0; i < numRows; i++) {
           for (let j = 0; j < numCols; j++) {
+            // setGeneration(generation + 1)
             let aliveNeighbors = 0;
             operations.forEach(([x, y]) => {
               const newI = i + x;
@@ -102,6 +111,7 @@ const App = () => {
               if (newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols) {
                 aliveNeighbors += g[newI][newJ];
               }
+
             })
             if (aliveNeighbors < 2 || aliveNeighbors > 3) {
               gridCopy[i][j] = 0;
@@ -110,19 +120,20 @@ const App = () => {
             }
           }
         }
+        setGeneration((g) => g + .5)
       });
     });
 
   }, []);
 
   useInterval(
-
     () => start(),
     300, isRunning
   );
 
   return (
-    <>
+    <div className="App">
+      <h2>Conway's Game of Life</h2>
       <div className="components">
         <div className="grid" style={{
           width: "510px",
@@ -140,9 +151,9 @@ const App = () => {
                     if (!isRunning) {
                       gridCopy[i][j] = gridDisplay[i][j] ? 0 : 1;
                     }
+
                   })
                   setGridDisplay(newGrid);
-
                 }}
 
                 style={
@@ -151,11 +162,14 @@ const App = () => {
               />
             ))}
         </div>
-        <Buttons setIsRunning={setIsRunning} isRunning={isRunning} randomCells={randomCells} reset={reset} slow={slow} fast={fast} />
+        <Buttons setIsRunning={setIsRunning} isRunning={isRunning} randomCells={randomCells} reset={reset} slow={slow} fast={fast} numRows={numRows} setNumRows={setNumRows} numCols={numCols} setNumCols={setNumCols} />
+        <Modal />
       </div>
-    </>
+      <h3>Generations: {generation}</h3>
+    </div>
   )
 }
 
 
 export default App;
+
