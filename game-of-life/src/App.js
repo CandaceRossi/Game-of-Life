@@ -26,6 +26,7 @@ const App = () => {
   // asign state to array for row and array for col - fill initial state with zeros
   const [numRows, setNumRows] = useState(25);
   const [numCols, setNumCols] = useState(25);
+  const [gridSize, setGridSize] = useState(25);
   const [gridDisplay, setGridDisplay] = useState(() => {
     const rows = [];
     for (let i = 0; i < numRows; i++) {
@@ -35,11 +36,12 @@ const App = () => {
   });
   const [generation, setGeneration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [speed, setSpeed] = useState(1000);
+  const [timeInterval, setTimeInterval] = useState(300);
+  const timeIntervalRef = useRef();
+  timeIntervalRef.current = timeInterval;
+  const gridSizeRef = useRef();
+  gridSizeRef.current = gridSize;
 
-  // const handleSelect = (evt) => {
-  //   setGridSize(evt)
-  // }
   const useInterval = (callback, delay, started) => {
     const savedCallback = useRef();
     useEffect(() => {
@@ -81,19 +83,6 @@ const App = () => {
     setGridDisplay(rows)
     setGeneration(0)
   }
-  //set speed to 1000
-  const slow = () => {
-    setSpeed(1000)
-    start()
-    // setIsRunning(isRunning, speed = 1000)
-  }
-  //set speed to 100
-  const fast = () => {
-    setSpeed(300)
-    start()
-    // setIsRunning(isRunning, speed = 300)
-  }
-
 
   //function that starts the game, sets the edge cases
   //accounts for neighbors, sets game logic based off neighbors
@@ -120,14 +109,19 @@ const App = () => {
             }
           }
         }
+        // setTimeout(start, timeIntervalRef.current)
         setGeneration((g) => g + .5)
       });
     });
-
+    // setTimeout(start, timeIntervalRef.current)
+    // setGridSize()
   }, []);
 
   useInterval(
-    () => start(),
+    () =>
+      start(),
+    // setGridSize(),
+    // setTimeout(start, timeIntervalRef.current),
     300, isRunning
   );
 
@@ -162,7 +156,12 @@ const App = () => {
               />
             ))}
         </div>
-        <Buttons setIsRunning={setIsRunning} isRunning={isRunning} randomCells={randomCells} reset={reset} slow={slow} fast={fast} numRows={numRows} setNumRows={setNumRows} numCols={numCols} setNumCols={setNumCols} />
+        <Buttons
+          setIsRunning={setIsRunning} isRunning={isRunning}
+          randomCells={randomCells} reset={reset} numRows={numRows}
+          setNumRows={setNumRows} numCols={numCols} setNumCols={setNumCols}
+          setGridSize={setGridSize} gridSize={gridSize}
+          timeInterval={timeInterval} setTimeInterval={setTimeInterval} />
         <Modal />
       </div>
       <h3>Generations: {generation}</h3>

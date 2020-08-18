@@ -1,14 +1,12 @@
-import React, { useState } from "react";
-
-function Pattern() {
+const Pattern = {
 
     //add living cells for patterns
 
     //Blinker
 
-    table[1][0].isAlive = true;
-    table[2][0].isAlive = true;
-    table[3][0].isAlive = true;
+    // table[1][0].isAlive = true;
+    // table[2][0].isAlive = true;
+    // table[3][0].isAlive = true;
 
 	/*
 	//Glider
@@ -27,7 +25,7 @@ function Pattern() {
 	table[12][14].isAlive = true;
 	*/
 
-    return (
+    return(
 
     )
 
