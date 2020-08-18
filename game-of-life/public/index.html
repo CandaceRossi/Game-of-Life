@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script src="jquery-3.5.1.min.js"></script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -25,10 +24,38 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-  </head>
-  <body>
+
+    <div class="popups-cont">
+        <div class="popups-cont__overlay"></div>
+        <div class="popup">
+            <div class="popup__pieces"></div>
+            <div class="popup__content">
+                <div class="popup__close"></div>
+                <h3 class="popup__heading"> About This Game: </h3>
+                <p class="popup__text"> The Game of Life is a cellular-automaton, zero player game, developed by John Conway in 1970. </p><br />
+                <p> Based on the state of each cell, whether each cell is alive or dead through a given round of the game, the community of cells evolve.</p><br />
+                <h4> The rules are as follow: </h4>
+                <p>◮ Birth: a dead cell will come alive if exactly 3 of its neighbors were alive.</p> <br/>
+                <p>◮ Death: a cell can die by: </p>
+                <p>◮ Overcrowding: if an alive cell has 3 or more alive neighbors, the cell will die. </p>
+                <p>◮ Exposure: If an alive cell has only 1 or 0 live neighbors, it will die</p> <br/>
+                <p>◮ Survival: a cell survives round to round if and only if 2 or 3 of its neighbors are alive.</p> <br/>
+                <p> Pay attention and see repetitive types of “life-forms” created in the game and whether a game of life session will go on infinitely.</p>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="popup-btn">About Game</button>
+
+
+</head>
+
+<body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+
+    </div>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -39,5 +66,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>
