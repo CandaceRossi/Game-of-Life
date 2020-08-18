@@ -1,4 +1,4 @@
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+[build.environment]
+YARN_VERSION = "1.17.3"
+YARN_FLAGS = "--production=false"
+NODE_ENV = "production"
