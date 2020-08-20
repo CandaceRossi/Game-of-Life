@@ -2,19 +2,21 @@ import React from 'react';
 
 const Buttons = (props) => {
     const toggleSpeed = () => {
-        if (props.timeInterval < 1000) {
-            props.setTimeInterval(1000)
+        if (props.timeInterval < 600) {
+            props.setTimeInterval(600)
         } else {
-            props.setTimeInterval(300)
+            props.setTimeInterval(200)
         }
     }
     const toggleSize = () => {
-        if (props.gridSize > 25) {
+        if (props.gridSize < 35) {
+            props.setNumRows(35)
+            props.setNumCols(35)
+            props.setGridSize(35)
+        } else {
             props.setNumRows(25)
             props.setNumCols(25)
-        } else {
-            props.setNumRows(35)
-            props.setNumRows(35)
+            props.setGridSize(25)
         }
     }
     return (
@@ -29,10 +31,10 @@ const Buttons = (props) => {
                     Reset
             </button>
                 <button className="btn-style" onClick={toggleSize}>
-                    {(props.numRows && props.numCols) ? "Bigger" : "Smaller"}
+                    {props.gridSize ? "Bigger" : "Smaller"}
                 </button>
                 <button className="btn-style" onClick={toggleSpeed}>
-                    {props.timeInterval < 1000 ? "Faster" : "Slower"}
+                    {props.timeInterval < 600 ? "Slower" : "Faster"}
                 </button>
                 <button className="btn-style" onClick={props.randomCells}>
                     Random Input

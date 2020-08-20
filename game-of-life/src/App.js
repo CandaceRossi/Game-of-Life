@@ -36,7 +36,7 @@ const App = () => {
   });
   const [generation, setGeneration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [timeInterval, setTimeInterval] = useState(300);
+  const [timeInterval, setTimeInterval] = useState(200);
   const timeIntervalRef = useRef();
   timeIntervalRef.current = timeInterval;
   const gridSizeRef = useRef();
@@ -109,20 +109,15 @@ const App = () => {
             }
           }
         }
-        // setTimeout(start, timeIntervalRef.current)
         setGeneration((g) => g + .5)
       });
     });
-    // setTimeout(start, timeIntervalRef.current)
-    // setGridSize()
   }, []);
 
   useInterval(
     () =>
       start(),
-    // setGridSize(),
-    // setTimeout(start, timeIntervalRef.current),
-    300, isRunning
+    timeIntervalRef.current, isRunning
   );
 
   return (
