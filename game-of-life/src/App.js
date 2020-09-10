@@ -109,7 +109,8 @@ const App = () => {
             }
           }
         }
-        setGeneration((g) => g + .5)
+        // setGeneration((g) => g + .5)
+        setGeneration(g)
       });
     });
   }, []);
