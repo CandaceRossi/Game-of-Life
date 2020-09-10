@@ -1,12 +1,12 @@
 const Pattern = {
 
-    //add living cells for patterns
+	//add living cells for patterns
 
-    //Blinker
+	//Blinker
 
-    // table[1][0].isAlive = true;
-    // table[2][0].isAlive = true;
-    // table[3][0].isAlive = true;
+	// table[1][0].isAlive = true;
+	// table[2][0].isAlive = true;
+	// table[3][0].isAlive = true;
 
 	/*
 	//Glider
@@ -25,8 +25,8 @@ const Pattern = {
 	table[12][14].isAlive = true;
 	*/
 
-    return(
+	return(
 
-    )
+	)
 
 }

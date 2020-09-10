@@ -41,7 +41,7 @@ const App = () => {
   timeIntervalRef.current = timeInterval;
   const gridSizeRef = useRef();
   gridSizeRef.current = gridSize;
-
+  //sets function that recalls start by time in intervals
   const useInterval = (callback, delay, started) => {
     const savedCallback = useRef();
     useEffect(() => {
